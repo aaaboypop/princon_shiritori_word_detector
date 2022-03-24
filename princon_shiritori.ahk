@@ -21,7 +21,7 @@ bot_token := "your_bot_Token"
 title = BlueStacks ; Set Title name here
 
 ; character match setting 
-ChaMatch = .*([ค]).*
+ChaMatch = .*([ค|ป|น]).*
 
 ;---------------------------------------------------------------------------------------------------------
 
