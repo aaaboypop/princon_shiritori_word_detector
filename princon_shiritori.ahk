@@ -96,8 +96,8 @@ loop
 
     out_file_path1 = %A_ScriptDir%\cha1.txt
     out_file_path2 = %A_ScriptDir%\cha2.txt
-    cmd1 = ""C:\Users\PONDX\Documents\GitHub\peco_tracker_sever\Princon_clan_score_capture\Capture2Text\Capture2Text_CLI.exe" -s "%cap_pos1%" -o "%out_file_path1%" %option%
-    cmd2 = ""C:\Users\PONDX\Documents\GitHub\peco_tracker_sever\Princon_clan_score_capture\Capture2Text\Capture2Text_CLI.exe" -s "%cap_pos2%" -o "%out_file_path2%" %option%
+    cmd1 = ""%A_ScriptDir%\Capture2Text\Capture2Text_CLI.exe" -s "%cap_pos1%" -o "%out_file_path1%" %option%
+    cmd2 = ""%A_ScriptDir%\Capture2Text\Capture2Text_CLI.exe" -s "%cap_pos2%" -o "%out_file_path2%" %option%
     RunWait, %ComSpec% /c %cmd1%,,hide
     RunWait, %ComSpec% /c %cmd2%,,hide
 
