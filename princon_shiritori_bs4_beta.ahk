@@ -51,13 +51,18 @@ bt_pos =
 544|449
 )
 
+WinActivate, % title
+WinMove, %title%, , , ,1287 , 764
+Sleep, 333
+WinGetPos, , , , Height, %title%
+if (Height != 764)
+    WinMove, %title%, , , ,1346 , 764
+
 arr_bt_pos := []
 Loop, Parse, bt_pos , `n, `r 
 {
     arr_bt_pos.Push(A_LoopField)
 }
-
-WinActivate, % title
 
 loop
 {
