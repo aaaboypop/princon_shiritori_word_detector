@@ -1,4 +1,4 @@
-﻿#NoEnv
+#NoEnv
 SetWorkingDir %A_ScriptDir%
 FileEncoding, UTF-8
 SetTitleMatchMode, 2
@@ -6,7 +6,7 @@ SetTitleMatchMode, 2
 #Include, Log_System.ahk
 LoadLogSetting( A_ScriptDir . "\Setting.ini", 1)
 CreateLogGUI()
-
+gdipToken := Gdip_Startup()
 
 
 
@@ -18,10 +18,10 @@ bot_id := "your_bot_ID"
 bot_token := "your_bot_Token"
 
 ; BlueStack Title Setting
-title = BlueStacks ; Set Title name here
+global title = BlueStacks 4 ; Set Title name here
 
 ; character match setting 
-ChaMatch = .*([ค|ป|น]).*
+ChaMatch = .*([ค]).*
 
 ;---------------------------------------------------------------------------------------------------------
 
@@ -66,15 +66,15 @@ Loop, Parse, bt_pos , `n, `r
 loop
 {
     WinGetPos, X, Y,,, % title
-    x1 := X+898
-    y1 := Y+359
-    x2 := X+935
+    x1 := X+893
+    y1 := Y+357
+    x2 := X+930
     y2 := Y+393
 
-    x3 := X+768
-    y3 := Y+423
+    x3 := X+757
+    y3 := Y+414
     x4 := X+948
-    y4 := Y+457
+    y4 := Y+450
     option = -l "Thai"
 
     cap_pos1 = %x1% %y1% %x2% %y2%
@@ -82,29 +82,38 @@ loop
 
 
     loop {
-        ImageSearch, , , 890, 674, 916, 705, *24 %A_ScriptDir%\try.png
-        If (ErrorLevel=0){
+        If (ImageS( A_ScriptDir . "\try.png", 890, 674, 916, 705, 24)){
             LogAdd("User",[1], "Try to Restart ..")
             ClickNA(932, 688)
             ClickNA(932, 688)
             Sleep, 1000
         }
-        ImageSearch, , , 894, 360, 905, 394, *4 %A_ScriptDir%\findcha.png
+        R := ImageS( A_ScriptDir . "\findcha.png", 894, 360, 905, 394, 4)
         Sleep, 100
     }	
-    Until (ErrorLevel=0)
+    Until (R)
+
+    pBitmap := Gdip_BitmapFromHWND(WinExist(title))
+    bm_cropped1:=Gdip_CloneBitmapArea(pBitmap, x1, y1, x2-x1, y2-y1)
+    Gdip_SaveBitmapToFile(bm_cropped1,  A_ScriptDir . "\1.png")
+    bm_cropped2:=Gdip_CloneBitmapArea(pBitmap, x3, y3, x4-x3, y4-y3)
+    Gdip_SaveBitmapToFile(bm_cropped2,  A_ScriptDir . "\2.png")
+
 
     out_file_path1 = %A_ScriptDir%\cha1.txt
     out_file_path2 = %A_ScriptDir%\cha2.txt
-    cmd1 = ""%A_ScriptDir%\Capture2Text\Capture2Text_CLI.exe" -s "%cap_pos1%" -o "%out_file_path1%" %option%
-    cmd2 = ""%A_ScriptDir%\Capture2Text\Capture2Text_CLI.exe" -s "%cap_pos2%" -o "%out_file_path2%" %option%
+    cmd1 = ""%A_ScriptDir%\Capture2Text\Capture2Text_CLI.exe" -i "%A_ScriptDir%\1.png" -o "%out_file_path1%" %option%
+    cmd2 = ""%A_ScriptDir%\Capture2Text\Capture2Text_CLI.exe" -i "%A_ScriptDir%\2.png" -o "%out_file_path2%" %option%
     RunWait, %ComSpec% /c %cmd1%,,hide
     RunWait, %ComSpec% /c %cmd2%,,hide
 
     FileRead, OutputText1, % out_file_path1
     FileRead, OutputText2, % out_file_path2
 
-    LogAdd("User",[1],OutputText2)
+    If (LastW != OutputText2){
+        LastW := OutputText2
+        LogAdd("User",[1],OutputText2)
+    }    
     
     RegExMatch(OutputText1, "O).*([ก-ฮ]).*" , obj)
     OutputCha1 := obj.value(1)
@@ -148,12 +157,22 @@ ExitApp
 
 ~F12::ExitApp
 
+#Include, Gdip_ImageSearch.ahk
 
 ;---------------------------------------------------------------------------------------------------------
+
+ImageS(ImgPath, X1, Y1, X2, Y2, v=0){
+bmpHaystack := Gdip_BitmapFromHWND(WinExist(title))
+bmpNeedle := Gdip_CreateBitmapFromFile(ImgPath)
+RET := Gdip_ImageSearch(bmpHaystack,bmpNeedle,LIST, X1, Y1, X2, Y2, v,0xFFFFFF,1,0)
+;LogAdd("User",[1], RET)
+Return RET
+}
+
 ClickNA(x,y){
     global title
     ControlClick, x%x% y%y%, %title%, , , , NA
-    Sleep, 100
+    Sleep, 10
 }
 
 RandClick(){
