@@ -55,7 +55,7 @@ WinActivate, % title
 WinMove, %title%, , , ,1282 , 754
 WinGetPos, , , , Height, %title%
 if (Height != 754)
-    WinMove, %title%, , , ,1314 , 754
+    WinMove, %title%, ,0,0,1314 , 754
 
 arr_bt_pos := []
 Loop, Parse, bt_pos , `n, `r 
