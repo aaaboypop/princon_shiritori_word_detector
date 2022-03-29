@@ -74,7 +74,8 @@ https://github.com/aaaboypop/princon_shiritori_word_detector/archive/refs/heads/
 
 
 ## วีดีโอประกอบ
-https://www.youtube.com/watch?v=Y0j0SZxH6BA
+https://www.youtube.com/watch?v=Y0j0SZxH6BA \
+https://www.youtube.com/watch?v=7aehnVrh30o
 
 
 ## Sheet ประกอบในการหาคำศัพท์
