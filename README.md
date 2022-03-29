@@ -35,7 +35,7 @@ https://github.com/aaaboypop/princon_shiritori_word_detector/archive/refs/heads/
 ตั้งค่าการทำงานของสคริปก่อนใช้งานในไฟล์ config.ini
 
  
-    ; [WordFind]
+    [WordFind]
     window_title=BlueStacks 4
     character_match=ก,ข,ค,น,ป,ล,ด,ถ
     
