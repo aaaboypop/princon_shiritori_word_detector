@@ -32,35 +32,40 @@ https://github.com/aaaboypop/princon_shiritori_word_detector/archive/refs/heads/
 
 
 
-ตั้งค่าการทำงานของสคริปก่อนใช้งาน
+ตั้งค่าการทำงานของสคริปก่อนใช้งานในไฟล์ config.ini
 
  
-    ; Telegram Bot Notification Setting
-    Telegram_Notification := False ; True for enable
-    chatid := "your_chat_ID"
-    bot_id := "your_bot_ID"
-    bot_token := "your_bot_Token"
-     
-    ; BlueStack Title Setting
-    title = BlueStacks ; Set Title name here
-     
-    ; character match setting
-    ChaMatch = .*([ค|ป|น]).*
+    ; [WordFind]
+    window_title=BlueStacks 4
+    character_match=ก,ข,ค,น,ป,ล,ด,ถ
+    
+    [Telegram]
+    Telegram_Notification=False
+    chatid=your_chat_ID
+    bot_id=your_bot_ID
+    bot_token=your_bot_Token
  
 
 **Telegram_Notification** *(True/False)* \
 ตั้งค่าเป็น True หากต้องการใช้งานบอทแจ้งเตือนของ Telegram โดนต้องตั้งค่า chatid, bot_id และ bot_token ให้ถูกต้อง
 
-**title** *(String)* \
+**window_title** *(String)* \
 หากชื่อของโปรแกรม/หน้าต่างจำลองที่ใช้นั้นไม่ใช่ BlueStacks ให้เปลี่ยนชื่อตามหน้าต่างที่คุณใช้งาน
 
-**ChaMatch** *(String RegEX)* \
-เงื่อนไขที่ต้องการค้นหา
+**character_match** *(String)* \
+เงื่อนไขที่ต้องการค้นหา เช่น ก,ข,ค
 
 
-เริ่มใช้งาน หากคุณตั้งค่า title ได้ถูกต้อง หน้าต่าง bluestacks จะถูกเรียนขึ้นมา และจะทำการเปลี่ยนขนาดไปเป็น 1282x754 (1287x764 สำหรับ BS4) หากไม่มีเครื่องมือด้านข้าง หรือ 1314x754 (1346x764 สำหรับ BS4) หากมีเครื่องมือด้านข้าง
+~~เริ่มใช้งาน หากคุณตั้งค่า title ได้ถูกต้อง หน้าต่าง bluestacks จะถูกเรียนขึ้นมา และจะทำการเปลี่ยนขนาดไปเป็น 1282x754 (1287x764 สำหรับ BS4) หากไม่มีเครื่องมือด้านข้าง หรือ 1314x754 (1346x764 สำหรับ BS4) หากมีเครื่องมือด้านข้าง~~
 
-> *เมื่อใช้งานโปรดคลิ๊กที่หน้าต่าง bluestacks เพื่อให้มั่นใจว่ามันกำลัง active ก่อนที่คุณจะหนีปายยย\
+หากสคริปไม่พบหน้าต่างที่ตั้งค่าไว้จะปรากฏหน้าต่างขึ้นมาถามเพื่อให้ใส่ชื่อของหน้าต่างใหม่ \
+![image](https://user-images.githubusercontent.com/13348147/160551165-86d978a8-eb84-42bd-935f-eb1f1384edbc.png)
+
+ภาพหน้าต่างเมื่อพร้อมทำงาน \
+![image](https://user-images.githubusercontent.com/13348147/160550834-a5a4deec-5508-4468-9ac0-d641d04ae85a.png)
+
+
+> ~~*เมื่อใช้งานโปรดคลิ๊กที่หน้าต่าง bluestacks เพื่อให้มั่นใจว่ามันกำลัง active ก่อนที่คุณจะหนีปายยย~~\
 การตั้งค่า BanWord คุณสามารถเข้าไปดูได้ในไฟล์ BanWord.txt\
 โดยคำเหล่านี้จะถูกเพิกเฉยแม้เงื่อนไขการตรวจจับจะเป็นจริง
 
