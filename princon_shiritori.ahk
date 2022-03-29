@@ -1,41 +1,4 @@
-#NoEnv
-SetWorkingDir %A_ScriptDir%
-FileEncoding, UTF-8
-SetTitleMatchMode, 2
-
-#Include, Log_System.ahk
-LoadLogSetting( A_ScriptDir . "\Setting.ini", 1)
-CreateLogGUI()
-gdipToken := Gdip_Startup()
-
-
-
-;---------------------------------------------------------------------------------------------------------
-; Telegram Bot Notification Setting
-Telegram_Notification := False ; True for enable
-chatid := "your_chat_ID"
-bot_id := "your_bot_ID"
-bot_token := "your_bot_Token"
-
-; BlueStack Title Setting
-global title = BlueStacks 4 ; Set Title name here
-
-; character match setting 
-ChaMatch = .*([ค]).*
-
-;---------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
+﻿#Include, config.ahk
 
 ; Click image position setting
 bt_pos =
@@ -51,6 +14,35 @@ bt_pos =
 543|441
 )
 
+x1 := 897
+y1 := 357
+x2 := 934
+y2 := 397
+x3 := 765
+y3 := 420
+x4 := 956
+y4 := 456
+option = -l "Thai"
+
+while !(WinExist(title)){
+    InputBox, title , Title Name not found, ไม่พบหน้าต่าง %title% โปรดใส่ชื่อของหน้าต่างใหม่, ,, ,,,,,%title%
+}
+
+UpdateCharMatch()
+
+Gui, Add, Text, , ชื่อหน้าต่าง BlueStack
+Gui, Add, Edit, w200 ReadOnly, %title%
+Gui, Add, Text, , เงื่อนไข
+Gui, Add, Edit, w200 ReadOnly, %CharMatch%
+
+Gui, Add, Checkbox, w200 vMode gGuiSubmit, "ลองใหม่อีกครั้ง" เมื่อไม่พบคำที่ต้องการ
+Gui, Add, Text, , ภาพล่าสุด
+Gui, Add, Pic, w37 h40 vPreview1,
+Gui, Add, Pic, w191 h36 vPreview2,
+
+Gui, Show,, Princon Shiritori Word Detector
+Gui, Submit, NoHide
+
 WinActivate, % title
 WinMove, %title%, , , ,1282 , 754
 WinGetPos, , , , Height, %title%
@@ -65,22 +57,6 @@ Loop, Parse, bt_pos , `n, `r
 
 loop
 {
-    WinGetPos, X, Y,,, % title
-    x1 := X+893
-    y1 := Y+357
-    x2 := X+930
-    y2 := Y+393
-
-    x3 := X+757
-    y3 := Y+414
-    x4 := X+948
-    y4 := Y+450
-    option = -l "Thai"
-
-    cap_pos1 = %x1% %y1% %x2% %y2%
-    cap_pos2 = %x3% %y3% %x4% %y4%
-
-
     loop {
         If (ImageS( A_ScriptDir . "\try.png", 890, 674, 916, 705, 24)){
             LogAdd("User",[1], "Try to Restart ..")
@@ -103,6 +79,7 @@ loop
     Gdip_disposeImage( t2 )
     Gdip_disposeImage( pBitmap )
 
+    Gosub, UpdateImage
 
     out_file_path1 = %A_ScriptDir%\cha1.txt
     out_file_path2 = %A_ScriptDir%\cha2.txt
@@ -125,109 +102,73 @@ loop
     RegExMatch(OutputText2, "O).*([ก-ฮ]).*" , obj)
     OutputCha2 := obj.value(1)
 
-    If (RegExMatch(OutputCha1, ChaMatch) or RegExMatch(OutputCha2, ChaMatch)){
-        Skip := False
-        FileRead, IgnoreWord, %A_ScriptDir%\BanWord.txt
-        Loop, Parse, IgnoreWord, `n ,`r
-        {
-            If RegExMatch(OutputText2, A_LoopField){
-                RandClick()
-                Skip := True
+    If (Mode = 0){
+        If (RegExMatch(OutputCha1, CharMatch) or RegExMatch(OutputCha2, CharMatch)){
+            Skip := False
+            FileRead, IgnoreWord, %A_ScriptDir%\BanWord.txt
+            Loop, Parse, IgnoreWord, `n ,`r
+            {
+                If RegExMatch(OutputText2, A_LoopField){
+                    RandClick()
+                    Skip := True
+                }
+            }
+            If (Skip){
+                Continue            
+            }
+
+            ClickNA(1216,697)
+            ClickNA(1216,697)
+            Telegram_Notification("พบคำที่ต้องการ `n1 : " OutputCha1 "`n2 : " OutputText2)
+
+            MsgBox,0x4,Ban,% "1 : " OutputCha1 "`n2 : " OutputCha2 "`n : " OutputText2
+            IfMsgBox Yes 
+            {
+                AddText := "`n" RegExReplace(OutputText2, "\n|\r", "")
+                FileAppend, %AddText%, %A_ScriptDir%\BanWord.txt
             }
         }
-        If (Skip){
-            Continue            
-        }
-
-        ClickNA(1216,697)
-        ClickNA(1216,697)
-        log("princon_shiritori.ahk : " . "1 : " OutputCha1 "`n2 : " OutputCha2 "`n3 : " OutputText2)
-
-        MsgBox,0x4,Ban,% "1 : " OutputCha1 "`n2 : " OutputCha2 "`n : " OutputText2
-        IfMsgBox Yes 
+        Else
         {
-            AddText := "`n" RegExReplace(OutputText2, "\n|\r", "")
-            FileAppend, %AddText%, %A_ScriptDir%\BanWord.txt
+            RandClick()
         }
     }
-    Else
-    {
-        RandClick()
+    Else If (Mode = 1){
+        If (RegExMatch(OutputCha1, CharMatch) or RegExMatch(OutputCha2, CharMatch)){
+            Skip := False
+            FileRead, IgnoreWord, %A_ScriptDir%\BanWord.txt
+            Loop, Parse, IgnoreWord, `n ,`r
+            {
+                If RegExMatch(OutputText2, A_LoopField){
+                    RandClick()
+                    Skip := True
+                }
+            }
+            If (Skip){
+                Continue            
+            }
+
+            ClickNA(1216,697) ; pause
+            ClickNA(1216,697) ; pause
+            Telegram_Notification("พบคำที่ต้องการ `n1 : " OutputCha1 "`n2 : " OutputText2)
+
+            MsgBox,0x4,Ban,% "1 : " OutputCha1 "`n2 : " OutputCha2 "`n : " OutputText2
+            IfMsgBox Yes 
+            {
+                AddText := "`n" RegExReplace(OutputText2, "\n|\r", "")
+                FileAppend, %AddText%, %A_ScriptDir%\BanWord.txt
+            }
+        }
+        Else
+        {
+            ClickNA(1216,697) ; pause
+            ClickNA(1216,697)
+            Sleep, 500
+            ClickNA(642,528) ; Restart
+            ClickNA(642,528)
+        }
     }
 }
-
-
 ExitApp
 
-~F12::ExitApp
-
-#Include, Gdip_ImageSearch.ahk
-
-;---------------------------------------------------------------------------------------------------------
-
-ImageS(ImgPath, X1, Y1, X2, Y2, v=0){
-bmpHaystack := Gdip_BitmapFromHWND(WinExist(title))
-bmpNeedle := Gdip_CreateBitmapFromFile(ImgPath)
-RET := Gdip_ImageSearch(bmpHaystack,bmpNeedle,LIST, X1, Y1, X2, Y2, v,0xFFFFFF,1,0)
-Gdip_disposeImage( bmpHaystack )
-Gdip_disposeImage( bmpNeedle )
-;LogAdd("User",[1], RET)
-Return RET
-}
-
-ClickNA(x,y){
-    global title
-    ControlClick, x%x% y%y%, %title%, , , , NA
-    Sleep, 10
-}
-
-RandClick(){
-    global arr_bt_pos
-    new_bt_pos := shuffle_arr(arr_bt_pos)
-
-    for i,v in new_bt_pos {
-        StringSplit, pos, v, |
-        ClickNA(pos1,pos2)
-    }
-}
-
-;---------------------------------------------------------------------------------------------------------
-shuffle_arr(arr){
-	c := arr.Length()
-	If (c) {
-		Random, n , 1, % c
-		new_arr := []
-		for i,v in arr {
-			(i != n) ? new_arr.Push(v)
-		}
-		r_arr := Func(A_ThisFunc).Bind(new_arr).Call()
-		If (r_arr = null) {
-			r_arr := []
-		}
-		r_arr.Push(arr[n]) 
-		Return r_arr
-	}	
-}
-
-;---------------------------------------------------------------------------------------------------------
-log(text)
-{
-    global
-
-    str=https://api.telegram.org/bot%bot_id%:%bot_token%/sendmessage?
-    param := "chat_id=" chatid "&text=" text
-    If (Telegram_Notification = True)
-        url_tovar(str, param)
-}
-
-;---------------------------------------------------------------------------------------------------------
-url_tovar(URL, param) { 
-    WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-    WebRequest.Open("POST", URL)
-    WebRequest.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    WebRequest.Send(param)
-    res := WebRequest.ResponseText
-    return res
-}    
-
-;---------------------------------------------------------------------------------------------------------
+#Include, Lib.ahk
