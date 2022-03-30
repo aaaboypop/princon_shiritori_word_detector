@@ -64,20 +64,15 @@ UpdateCharMatch(){
 
 ;---------------------------------------------------------------------------------------------------------
 shuffle_arr(arr){
-	c := arr.Length()
-	If (c) {
-		Random, n , 1, % c
-		new_arr := []
-		for i,v in arr {
-			(i != n) ? new_arr.Push(v)
-		}
-		r_arr := Func(A_ThisFunc).Bind(new_arr).Call()
-		If (r_arr = null) {
-			r_arr := []
-		}
-		r_arr.Push(arr[n]) 
-		Return r_arr
-	}	
+	loop {
+		c := arr.Length()
+		if (c = 0)
+			Break
+		Random, n1 , 1, % c
+		new_arr.Push(arr[n1])
+		arr.RemoveAt(n1)
+	}
+	Return new_arr
 }
 
 ;---------------------------------------------------------------------------------------------------------
