@@ -7,7 +7,7 @@
 
 ## สิ่งจำเป็น
 คอม x86/x64 ที่ใช้ windows 10\
-Bluestacks 5/4\
+Bluestacks 5\
 AHK
 
 ## การใช้งาน
