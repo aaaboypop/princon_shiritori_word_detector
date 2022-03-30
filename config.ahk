@@ -3,7 +3,6 @@
 #NoEnv
 SetWorkingDir %A_ScriptDir%
 FileEncoding, UTF-8
-SetTitleMatchMode, 2
 
 #Include, Log_System.ahk
 LoadLogSetting( A_ScriptDir . "\Setting.ini")
