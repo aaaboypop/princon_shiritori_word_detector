@@ -7,7 +7,7 @@
 
 ## สิ่งจำเป็น
 คอม x86/x64 ที่ใช้ windows 10\
-Bluestacks 5/4\
+Bluestacks 5\
 AHK
 
 ## การใช้งาน
@@ -35,7 +35,7 @@ https://github.com/aaaboypop/princon_shiritori_word_detector/archive/refs/heads/
 ตั้งค่าการทำงานของสคริปก่อนใช้งานในไฟล์ config.ini
 
  
-    ; [WordFind]
+    [WordFind]
     window_title=BlueStacks 4
     character_match=ก,ข,ค,น,ป,ล,ด,ถ
     
@@ -74,7 +74,8 @@ https://github.com/aaaboypop/princon_shiritori_word_detector/archive/refs/heads/
 
 
 ## วีดีโอประกอบ
-https://www.youtube.com/watch?v=Y0j0SZxH6BA
+https://www.youtube.com/watch?v=Y0j0SZxH6BA \
+https://www.youtube.com/watch?v=7aehnVrh30o
 
 
 ## Sheet ประกอบในการหาคำศัพท์
